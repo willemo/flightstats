@@ -3,6 +3,7 @@
 namespace Willemo\FlightStats;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use GuzzleHttp\Client;
 
 class FlexClient
 {
@@ -12,6 +13,13 @@ class FlexClient
      * @var array
      */
     protected $config;
+
+    /**
+     * The HTTP client.
+     *
+     * @var GuzzleHttp\Client
+     */
+    protected $client;
 
     /**
      * Create a new FlexClient instance with its config.
@@ -47,5 +55,21 @@ class FlexClient
             'application_id',
             'application_key',
         ]);
+    }
+
+    /**
+     * Get the configured HTTP client.
+     *
+     * @return GuzzleHttp\Client The configured HTTP client
+     */
+    public function getClient()
+    {
+        if ($this->client === null) {
+            $this->client = new Client([
+                'base_uri' => $this->config['base_uri'],
+            ]);
+        }
+
+        return $this->client;
     }
 }
