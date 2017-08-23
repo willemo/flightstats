@@ -45,15 +45,14 @@ class FlexClient
     {
         $resolver->setDefaults([
             'base_uri' => 'https://api.flightstats.com/flex',
-            'version' => 'v2',
             'protocol' => 'rest',
             'format' => 'json',
             'use_http_errors' => true,
         ]);
 
         $resolver->setRequired([
-            'application_id',
-            'application_key',
+            'appId',
+            'appKey',
         ]);
     }
 
@@ -71,5 +70,16 @@ class FlexClient
         }
 
         return $this->client;
+    }
+
+    /**
+     * Get a veriable from the config.
+     *
+     * @param  string $name The name of the variable to get
+     * @return mixed        The value of the config variable
+     */
+    public function getConfig($name)
+    {
+        return $this->config[$name];
     }
 }
