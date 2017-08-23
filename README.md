@@ -1,2 +1,4 @@
-# flightstats
-PHP client for the FlightStats API
+# FlightStats
+
+PHP client for the FlightStats API.
+
