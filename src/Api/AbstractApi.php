@@ -40,10 +40,10 @@ abstract class AbstractApi implements ApiInterface
     /**
      * Send the request through the FlexClient.
      *
-     * @param  string $endpoint                   The endpoint to make the
-     *                                            request to
-     * @param  array  $queryParams                The query parameters
-     * @return Psr\Http\Message\ResponseInterface The response from the API
+     * @param  string $endpoint    The endpoint to make the
+     *                             request to
+     * @param  array  $queryParams The query parameters
+     * @return array               The response from the API
      */
     protected function sendRequest($endpoint, array $queryParams)
     {

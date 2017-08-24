@@ -34,7 +34,7 @@ class Schedules extends AbstractApi
      * @param  integer  $flight      The flight number
      * @param  DateTime $date        The arrival date
      * @param  array    $queryParams Query parameters to add to the request
-     * @return ResponseInterface     The response from the API
+     * @return array                 The response from the API
      */
     public function getFlightByArrivalDate(
         $carrier,
@@ -59,7 +59,7 @@ class Schedules extends AbstractApi
      * @param  integer  $flight      The flight number
      * @param  DateTime $date        The departure date
      * @param  array    $queryParams Query parameters to add to the request
-     * @return ResponseInterface     The response from the API
+     * @return array                 The response from the API
      */
     public function getFlightByDepartureDate(
         $carrier,

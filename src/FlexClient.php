@@ -4,7 +4,9 @@ namespace Willemo\FlightStats;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Willemo\FlightStats\Exception\InvalidApiException;
+use Willemo\FlightStats\Exception\ClientException as FlexClientException;
 use Willemo\FlightStats\Api\ApiInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -98,7 +100,7 @@ class FlexClient
      * @param  string $version     The API version
      * @param  string $endpoint    The endpoint of the URI
      * @param  array  $queryParams The query parameters
-     * @return ResponseInterface   The response from the API
+     * @return array               The response from the API
      */
     public function sendRequest(
         $api,
@@ -110,9 +112,15 @@ class FlexClient
 
         $query = $this->buidlQuery($queryParams);
 
-        return $this->getClient()->request('GET', $endpoint, [
-            'query' => $query
-        ]);
+        try {
+            $response = $this->getClient()->request('GET', $endpoint, [
+                'query' => $query
+            ]);
+        } catch (ClientException $e) {
+            return $this->parseClientException($e);
+        }
+
+        return $this->parseResponse($response);
     }
 
     /**
@@ -187,5 +195,42 @@ class FlexClient
         $queryParams['extendedOptions'] = implode('+', $extendedOptions);
 
         return $queryParams;
+    }
+
+    /**
+     * Parse the response from the API to an array
+     *
+     * @param  ResponseInterface $response The response from the API
+     * @return array                       The response array
+     */
+    protected function parseResponse(ResponseInterface $response)
+    {
+        return json_decode($response->getBody(), true);
+    }
+
+    /**
+     * Parse the error response from the API
+     *
+     * @param  ClientException $e  The exception that contains the response
+     * @throws FlexClientException The parsed error response from the API
+     * @return void
+     */
+    protected function parseClientException(ClientException $e)
+    {
+        $response = $e->getResponse();
+
+        $lines = explode("\n", $response->getBody());
+
+        $message = 'Something went wrong';
+
+        foreach ($lines as $line) {
+            if (strpos($line, 'message') !== false) {
+                $message = substr($line, 9);
+
+                break;
+            }
+        }
+
+        throw new FlexClientException($message, 0);
     }
 }

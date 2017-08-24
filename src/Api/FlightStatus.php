@@ -33,7 +33,7 @@ class FlightStatus extends AbstractApi
      * @param  string $flightId    FlightStats' Flight ID number for the desired
      *                             flight
      * @param  array  $queryParams Query parameters to add to the request
-     * @return ResponseInterface   The response from the API
+     * @return array               The response from the API
      */
     public function getFlightStatusById($flightId, array $queryParams = [])
     {
@@ -49,7 +49,7 @@ class FlightStatus extends AbstractApi
      * @param  integer  $flight      The flight number
      * @param  DateTime $date        The arrival date
      * @param  array    $queryParams Query parameters to add to the request
-     * @return ResponseInterface     The response from the API
+     * @return array                 The response from the API
      */
     public function getFlightStatusByArrivalDate(
         $carrier,
@@ -78,7 +78,7 @@ class FlightStatus extends AbstractApi
      * @param  integer  $flight      The flight number
      * @param  DateTime $date        The departure date
      * @param  array    $queryParams Query parameters to add to the request
-     * @return ResponseInterface     The response from the API
+     * @return array                 The response from the API
      */
     public function getFlightStatusByDepartureDate(
         $carrier,
