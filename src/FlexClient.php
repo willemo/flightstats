@@ -168,7 +168,11 @@ class FlexClient
 
         $queryParams = array_merge($auth, $queryParams);
 
-        $extendedOptions = $queryParams['extendedOptions'] ?: [];
+        if (isset($queryParams['extendedOptions'])) {
+            $extendedOptions = $queryParams['extendedOptions'];
+        } else {
+            $extendedOptions = [];
+        }
 
         if (!is_array($extendedOptions)) {
             $extendedOptions = [$extendedOptions];
