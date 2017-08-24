@@ -28,7 +28,7 @@ class FlightStatus extends AbstractApi
     }
 
     /**
-     * Returns the Flight Status associated with provided Flight ID.
+     * Get the flight status from a flight associated with provided Flight ID.
      *
      * @param  string $flightId    FlightStats' Flight ID number for the desired
      *                             flight
@@ -42,6 +42,15 @@ class FlightStatus extends AbstractApi
         return $this->sendRequest($endpoint, $queryParams);
     }
 
+    /**
+     * Get the flight status from a flight that's arriving on the given date.
+     *
+     * @param  string   $carrier     The carrier (airline) code
+     * @param  integer  $flight      The flight number
+     * @param  DateTime $date        The arrival date
+     * @param  array    $queryParams Query parameters to add to the request
+     * @return ResponseInterface     The response from the API
+     */
     public function getFlightStatusByArrivalDate(
         $carrier,
         $flight,
@@ -62,6 +71,15 @@ class FlightStatus extends AbstractApi
         return $this->sendRequest($endpoint, $queryParams);
     }
 
+    /**
+     * Get the flight status from a flight that's departing on the given date.
+     *
+     * @param  string   $carrier     The carrier (airline) code
+     * @param  integer  $flight      The flight number
+     * @param  DateTime $date        The departure date
+     * @param  array    $queryParams Query parameters to add to the request
+     * @return ResponseInterface     The response from the API
+     */
     public function getFlightStatusByDepartureDate(
         $carrier,
         $flight,
