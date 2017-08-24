@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 
 /**
  * @method ApiInterface flightStatus()
+ * @method ApiInterface schedules()
  */
 class FlexClient
 {
