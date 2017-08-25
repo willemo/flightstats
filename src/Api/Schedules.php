@@ -49,7 +49,9 @@ class Schedules extends AbstractApi
             $date->format('Y/n/j')
         );
 
-        return $this->sendRequest($endpoint, $queryParams);
+        $response = $this->sendRequest($endpoint, $queryParams);
+
+        return $this->parseResponse($response);
     }
 
     /**
@@ -74,6 +76,62 @@ class Schedules extends AbstractApi
             $date->format('Y/n/j')
         );
 
-        return $this->sendRequest($endpoint, $queryParams);
+        $response = $this->sendRequest($endpoint, $queryParams);
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Parse the response from the API to a more uniform and thorough format.
+     *
+     * @param  array  $response The response from the API
+     * @return array            The parsed response
+     */
+    protected function parseResponse(array $response)
+    {
+        $airlines = $this->parseAirlines($response['appendix']['airlines']);
+
+        $airports = $this->parseAirports($response['appendix']['airports']);
+
+        $flights = [];
+
+        foreach ($response['scheduledFlights'] as $flight) {
+            // Set the carrier
+            $carrier = $airlines[$flight['carrierFsCode']];
+
+            $flight['carrier'] = $carrier;
+
+            // Set the departure airport
+            $departureAirport = $airports[$flight['departureAirportFsCode']];
+
+            $flight['departureAirport'] = $departureAirport;
+
+            // Set the arrival airport
+            $arrivalAirport = $airports[$flight['arrivalAirportFsCode']];
+
+            $flight['arrivalAirport'] = $arrivalAirport;
+
+            // Set the UTC departure time
+            $flight['departureTime'] = [
+                'dateLocal' => $flight['departureTime'],
+                'dateUtc' => $this->dateToUtc(
+                    $flight['departureTime'],
+                    $departureAirport['timeZoneRegionName']
+                ),
+            ];
+
+            // Set the UTC arrival time
+            $flight['arrivalTime'] = [
+                'dateLocal' => $flight['arrivalTime'],
+                'dateUtc' => $this->dateToUtc(
+                    $flight['arrivalTime'],
+                    $arrivalAirport['timeZoneRegionName']
+                ),
+            ];
+
+            $flights[] = $flight;
+        }
+
+        return $flights;
     }
 }
