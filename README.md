@@ -26,10 +26,6 @@ $response = $client->schedules()->getFlightByDepartureDate(
     100
     new DateTime('2017-09-05')
 );
-
-$json = $response->getBody();
-
-$data = json_decode($json, true);
 ```
 
 ## Available APIs
