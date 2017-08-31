@@ -3,7 +3,6 @@
 namespace Willemo\FlightStats\Api;
 
 use DateTime;
-use Psr\Http\Message\ResponseInterface;
 
 class FlightStatus extends AbstractApi
 {

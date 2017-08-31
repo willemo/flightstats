@@ -26,7 +26,7 @@ class FlexClient
     /**
      * The HTTP client.
      *
-     * @var GuzzleHttp\Client
+     * @var Client
      */
     protected $client;
 
@@ -69,7 +69,7 @@ class FlexClient
     /**
      * Get the configured HTTP client.
      *
-     * @return GuzzleHttp\Client The configured HTTP client
+     * @return Client The configured HTTP client
      */
     public function getClient()
     {
@@ -83,7 +83,7 @@ class FlexClient
     }
 
     /**
-     * Get a veriable from the config.
+     * Get a variable from the config.
      *
      * @param  string $name The name of the variable to get
      * @return mixed        The value of the config variable
@@ -110,17 +110,19 @@ class FlexClient
     ) {
         $endpoint = $this->buildEndpoint($api, $version, $endpoint);
 
-        $query = $this->buidlQuery($queryParams);
+        $query = $this->buildQuery($queryParams);
 
         try {
             $response = $this->getClient()->request('GET', $endpoint, [
                 'query' => $query
             ]);
+
+            return $this->parseResponse($response);
         } catch (ClientException $e) {
-            return $this->parseClientException($e);
+            $this->parseClientException($e);
         }
 
-        return $this->parseResponse($response);
+        return [];
     }
 
     /**
@@ -147,6 +149,9 @@ class FlexClient
     /**
      * Build the endpoint of the URI.
      *
+     * @param  string $api      The API name
+     * @param  string $version  The API version
+     * @param  string $endpoint The endpoint to use
      * @return string The full endpoint string for this API endpoint
      */
     protected function buildEndpoint($api, $version, $endpoint)
@@ -167,7 +172,7 @@ class FlexClient
      * @param  array $queryParams The query parameters to use
      * @return array              The query parameters
      */
-    protected function buidlQuery(array $queryParams = [])
+    protected function buildQuery(array $queryParams = [])
     {
         $auth = [
             'appId' => $this->config['appId'],
@@ -211,13 +216,14 @@ class FlexClient
     /**
      * Parse the error response from the API
      *
-     * @param  ClientException $e  The exception that contains the response
-     * @throws FlexClientException The parsed error response from the API
+     * @param  ClientException $exception The exception that contains the
+     *                                    response
+     * @throws FlexClientException        The parsed error response from the API
      * @return void
      */
-    protected function parseClientException(ClientException $e)
+    protected function parseClientException(ClientException $exception)
     {
-        $response = $e->getResponse();
+        $response = $exception->getResponse();
 
         $lines = explode("\n", $response->getBody());
 

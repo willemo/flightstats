@@ -11,7 +11,7 @@ abstract class AbstractApi implements ApiInterface
     /**
      * The FlexClient.
      *
-     * @var Willemo\FlightStats\FlexClient
+     * @var FlexClient
      */
     protected $flexClient;
 
@@ -102,19 +102,19 @@ abstract class AbstractApi implements ApiInterface
      * @return DateTime|string         The date/time in UTC
      */
     protected function dateToUtc(
-        string $dateTimeString,
-        string $timeZone,
+        $dateTimeString,
+        $timeZone,
         $shouldFormat = true
     ) {
-        $dt = new DateTime($dateTimeString, new DateTimeZone($timeZone));
+        $date = new DateTime($dateTimeString, new DateTimeZone($timeZone));
 
-        $dt->setTimeZone(new DateTimeZone('UTC'));
+        $date->setTimeZone(new DateTimeZone('UTC'));
 
         if (!$shouldFormat) {
-            return $dt;
+            return $date;
         }
 
-        return $dt->format('c');
+        return $date->format('c');
     }
 
     /**
