@@ -8,11 +8,13 @@ use GuzzleHttp\Exception\ClientException;
 use Willemo\FlightStats\Exception\InvalidApiException;
 use Willemo\FlightStats\Exception\ClientException as FlexClientException;
 use Willemo\FlightStats\Api\ApiInterface;
+use Willemo\FlightStats\Api\FlightStatus;
+use Willemo\FlightStats\Api\Schedules;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * @method ApiInterface flightStatus()
- * @method ApiInterface schedules()
+ * @method FlightStatus flightStatus()
+ * @method Schedules schedules()
  */
 class FlexClient
 {
