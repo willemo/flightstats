@@ -5,17 +5,11 @@ namespace Willemo\FlightStats;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use Willemo\FlightStats\Exception\InvalidApiException;
 use Willemo\FlightStats\Exception\ClientException as FlexClientException;
-use Willemo\FlightStats\Api\ApiInterface;
 use Willemo\FlightStats\Api\FlightStatus;
 use Willemo\FlightStats\Api\Schedules;
 use Psr\Http\Message\ResponseInterface;
 
-/**
- * @method FlightStatus flightStatus()
- * @method Schedules schedules()
- */
 class FlexClient
 {
     /**
@@ -128,24 +122,23 @@ class FlexClient
     }
 
     /**
-     * Get the API to make requests to.
+     * Get the FlightStatus API.
      *
-     * @param  string $name        The name of the API
-     * @param  array  $arguments   The arguments for this method (not used)
-     * @throws InvalidApiException If the API class doesn't exist
-     * @return ApiInterface        The API object
+     * @return FlightStatus
      */
-    public function __call($name, $arguments)
+    public function flightStatus()
     {
-        $apiName = ucfirst($name);
+        return new FlightStatus($this);
+    }
 
-        $className = __NAMESPACE__ . '\\Api\\' . $apiName;
-
-        if (!class_exists($className)) {
-            throw new InvalidApiException("API {$apiName} doesn't exist.");
-        }
-
-        return new $className($this);
+    /**
+     * Get the Schedules API.
+     *
+     * @return Schedules
+     */
+    public function schedules()
+    {
+        return new Schedules($this);
     }
 
     /**
