@@ -115,7 +115,7 @@ class Schedules extends AbstractApi
             $flight['arrivalAirport'] = $arrivalAirport;
 
             // Set the UTC departure time
-            $flight['departureTime'] = [
+            $flight['departureDate'] = [
                 'dateLocal' => $flight['departureTime'],
                 'dateUtc' => $this->dateToUtc(
                     $flight['departureTime'],
@@ -124,7 +124,7 @@ class Schedules extends AbstractApi
             ];
 
             // Set the UTC arrival time
-            $flight['arrivalTime'] = [
+            $flight['arrivalDate'] = [
                 'dateLocal' => $flight['arrivalTime'],
                 'dateUtc' => $this->dateToUtc(
                     $flight['arrivalTime'],
