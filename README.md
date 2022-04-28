@@ -2,6 +2,10 @@
 
 PHP client for the FlightStats API.
 
+## This project is abandoned
+
+This project is no longer supported.
+
 ## Installation
 
 Use Composer to install this package:
